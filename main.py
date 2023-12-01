@@ -22,15 +22,19 @@ def day1_part2():
     listNumber = []
     transTable = {"one": "1", "two": "2", "three": "3", "four": "4",
                   "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9"}
-    with resource_stream('input', 'D1test.txt') as textInput:
+    with resource_stream('input', 'D1.txt') as textInput:
         for line in textInput.readlines():
+            numbers = []
             line = line.decode().removesuffix("\n")
-            for k, v in transTable.items():
-                line = sub(k, v, line)
-            numbers = sub("\D", "", line)
+            for i in range(len(line)):
+                if line[i].isdigit():
+                    numbers.append(line[i])
+                for k, v in transTable.items():
+                    if line.startswith(k, i):
+                        numbers.append(v)
             lineNumber = "".join([numbers[0], numbers[-1]])
             listNumber.append(int(lineNumber))
     return reduce(lambda a, b: a+b, listNumber)
 
 
-print(day1_part1())
+print(day1_part2())
