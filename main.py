@@ -112,6 +112,24 @@ def day4_part1():
                 res.append(pow(2,power))
     return reduce(lambda a,b: a+b, res)
 
+def day4_part2():
+    print("Day 4")
+    with resource_stream('input', 'D4.txt') as textInput:
+        lines=textInput.readlines()
+        cardnumbers=[1 for line in lines]
+        for i in range(len(cardnumbers)):
+            line = lines[i].decode().removesuffix("\n")
+            numbers=line.split(":")[1].split("|")
+            winningNumbers,givenNumbers=numbers[0].split(),numbers[1].split()
+            nbValide=0
+            for givenNumber in givenNumbers:
+                if givenNumber in winningNumbers:
+                    nbValide+=1
+            for j in range(i+1,i+1+nbValide):
+                if j>len(cardnumbers):
+                    break
+                cardnumbers[j]+=cardnumbers[i]
+    return reduce(lambda a,b: a+b, cardnumbers)
 
 
-print(day4_part1())
+print(day4_part2())
