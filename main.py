@@ -18,7 +18,6 @@ def day1_part1():
             listNumber.append(int(lineNumber))
     return reduce(lambda a, b: a+b, listNumber)
 
-
 def day1_part2():
     listNumber = []
     transTable = {"one": "1", "two": "2", "three": "3", "four": "4",
@@ -95,6 +94,37 @@ def day2_part2():
             gamePower.append(reduce(lambda a,b:a*b,gameSet.values()))
     return reduce(lambda a,b: a+b, gamePower)
 
+def day3_part1():
+    print("Day 3")
+    res=[]
+    with resource_stream('input', 'D3.txt') as textInput:
+        matrice=[line.decode()[:-1] for line in textInput.readlines()]
+        res=[]
+        for i in range(len(matrice)):
+            for j in range(len(matrice[i])):
+                if not matrice[i][j].isnumeric() and matrice[i][j]!=".":
+                    print(matrice[i][j])
+                    if i-1>=0:
+                        if j-1>=0:
+                            print(f"upperleft is {matrice[i-1][j-1]}")
+                        print(f"upper is {matrice[i-1][j]}")
+                        if j+1<=len(matrice[i]):
+                            print(f"upperright is {matrice[i-1][j+1]}")
+                    if j-1>=0:
+                        print(f"left is {matrice[i][j-1]}")
+                    if j+1<=len(matrice[i]):
+                        print(f"right is {matrice[i][j+1]}")
+                    if i+1<=len(matrice):
+                        if j-1>=0:
+                            print(f"bottomleft is {matrice[i+1][j-1]}")
+                        print(f"bottom is {matrice[i+1][j]}")
+                        if j+1<=len(matrice[i]):
+                            print(f"bottomright is {matrice[i+1][j+1]}")
+                    
+            print("------------------------------------------------")
+    return reduce(lambda a,b: a+b, res)
+
+
 
 def day4_part1():
     print("Day 4")
@@ -132,4 +162,4 @@ def day4_part2():
     return reduce(lambda a,b: a+b, cardnumbers)
 
 
-print(day4_part2())
+print(day3_part1())
