@@ -96,4 +96,22 @@ def day2_part2():
     return reduce(lambda a,b: a+b, gamePower)
 
 
-print(day2_part2())
+def day4_part1():
+    print("Day 4")
+    res=[]
+    with resource_stream('input', 'D4.txt') as textInput:
+        for line in textInput.readlines():
+            line = line.decode().removesuffix("\n")
+            numbers=line.split(":")[1].split("|")
+            winningNumbers,givenNumbers=numbers[0].split(),numbers[1].split()
+            power=-1
+            for givenNumber in givenNumbers:
+                if givenNumber in winningNumbers:
+                    power+=1
+            if power>=0:
+                res.append(pow(2,power))
+    return reduce(lambda a,b: a+b, res)
+
+
+
+print(day4_part1())
