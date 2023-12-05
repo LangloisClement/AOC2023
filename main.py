@@ -2,8 +2,8 @@
 
 from pkg_resources import resource_stream
 from functools import reduce
-from re import sub
-import re
+from re import sub, findall
+from day5 import Day5
 
 print("hello world")
 
@@ -56,7 +56,7 @@ def day2_part1():
                 for cube in cubes:
                     if not flagValide:
                         break
-                    nb = int(*(re.findall("(\d+)", cube)))
+                    nb = int(*(findall("(\d+)", cube)))
                     match cube:
                         case str(a) if "red" in a:
                             if nb > 12:
@@ -84,7 +84,7 @@ def day2_part2():
             for cubeSet in cubeSets:
                 cubes = cubeSet.strip().split(", ")
                 for cube in cubes:
-                    nb = int(*(re.findall("(\d+)", cube)))
+                    nb = int(*(findall("(\d+)", cube)))
                     match cube:
                         case str(a) if "red" in a:
                             if nb > gameSet["red"]:
@@ -168,102 +168,5 @@ def day4_part2():
                 cardnumbers[j] += cardnumbers[i]
     return reduce(lambda a, b: a+b, cardnumbers)
 
-
-def day5_xToY_dict(lines: list[str], i: int):
-    xToY = {}
-    while i < len(lines) and lines[i] != "":
-        dest, source, ran = lines[i].split()
-        dest, source, ran = int(dest), int(source), int(ran)
-        xToY.update([(source+k, dest+k) for k in range(ran)])
-        i += 1
-    return xToY, i
-
-def day5_xToY_tuples_list(lines: list[str], i: int):
-    xToY = []
-    while i < len(lines) and lines[i] != "":
-        dest, source, ran = lines[i].split()
-        dest, source, ran = int(dest), int(source), int(ran)
-        xToY.append((dest,source,ran))
-        i += 1
-    return xToY, i
-
-def day5_findNumber(n: int, tupleList: list(tuple())):
-    for t in tupleList:
-        if n >= t[1] and n<=t[1]+t[2]:
-            diff=n-t[1]
-            return diff+t[0]
-    return n    
-
-def day5_part1BRUT_FORCE():
-    print("Day 5")
-    with resource_stream('input', 'D5.txt') as textInput:
-        lines = [l.decode().strip() for l in textInput.readlines()]
-        seedNumbers = lines[0].split(":")[1].split()
-        i = 3
-        print("compiling seed to soil")
-        seedToSoil, i = day5_xToY_dict(lines, i)
-        print("compiling soil to fert")
-        soilToFert, i = day5_xToY_dict(lines, i+2)
-        print("compiling fert to water")
-        fertToWater, i = day5_xToY_dict(lines, i+2)
-        print("compiling water to light")
-        waterToLight, i = day5_xToY_dict(lines, i+2)
-        print("compiling light to temp")
-        lightToTemp, i = day5_xToY_dict(lines, i+2)
-        print("compiling temp to humi")
-        tempToHumidity, i = day5_xToY_dict(lines, i+2)
-        print("compiling humi to loc")
-        humidityToLoc, i = day5_xToY_dict(lines, i+2)
-
-        seedToSoil.setdefault
-        locList = []
-        for seed in seedNumbers:
-            seed=int(seed)
-            soil = seedToSoil.setdefault(seed, seed)
-            fert = soilToFert.setdefault(soil, soil)
-            water = fertToWater.setdefault(fert, fert)
-            light = waterToLight.setdefault(water, water)
-            temp = lightToTemp.setdefault(light, light)
-            hum = tempToHumidity.setdefault(temp, temp)
-            loc = humidityToLoc.setdefault(hum, hum)
-            locList.append(loc)
-
-        return locList.sort()[0]
-
-def day5_part1():
-    print("Day 5")
-    with resource_stream('input', 'D5.txt') as textInput:
-        lines = [l.decode().strip() for l in textInput.readlines()]
-        seedNumbers = lines[0].split(":")[1].split()
-        i = 3
-        print("compiling seed to soil")
-        seedToSoil, i = day5_xToY_tuples_list(lines, i)
-        print("compiling soil to fert")
-        soilToFert, i = day5_xToY_tuples_list(lines, i+2)
-        print("compiling fert to water")
-        fertToWater, i = day5_xToY_tuples_list(lines, i+2)
-        print("compiling water to light")
-        waterToLight, i = day5_xToY_tuples_list(lines, i+2)
-        print("compiling light to temp")
-        lightToTemp, i = day5_xToY_tuples_list(lines, i+2)
-        print("compiling temp to humi")
-        tempToHumidity, i = day5_xToY_tuples_list(lines, i+2)
-        print("compiling humi to loc")
-        humidityToLoc, i = day5_xToY_tuples_list(lines, i+2)
-        locList = []
-        for seed in seedNumbers:
-            seed=int(seed)
-            soil = day5_findNumber(seed,seedToSoil)
-            fert = day5_findNumber(soil,soilToFert)
-            water = day5_findNumber(fert,fertToWater)
-            light = day5_findNumber(water,waterToLight)
-            temp = day5_findNumber(light,lightToTemp)
-            hum = day5_findNumber(temp,tempToHumidity)
-            loc = day5_findNumber(hum,humidityToLoc)
-            locList.append(loc)
-
-        locList.sort()
-        return locList[0]
-    
-
-print(day5_part1())
+day5Class=Day5("D5.txt")
+print( day5Class.part1())
