@@ -2,7 +2,7 @@
 
 from pkg_resources import resource_stream
 from functools import reduce
-from re import sub, findall
+from re import sub, findall,finditer
 from day5 import Day5
 
 print("hello world")
@@ -12,8 +12,8 @@ def day1_part1():
     listNumber = []
     with resource_stream('input', 'D1.txt') as textInput:
         for line in textInput.readlines():
-            line = line.decode().removesuffix("\n")
-            numbers = sub("\D", "", line)
+            line = line.decode().strip()
+            numbers = sub("[^0-9]", "", line)
             lineNumber = "".join([numbers[0], numbers[-1]])
             listNumber.append(int(lineNumber))
     return reduce(lambda a, b: a+b, listNumber)
@@ -26,7 +26,7 @@ def day1_part2():
     with resource_stream('input', 'D1.txt') as textInput:
         for line in textInput.readlines():
             numbers = []
-            line = line.decode().removesuffix("\n")
+            line = line.decode().strip()
             for i in range(len(line)):
                 if line[i].isdigit():
                     numbers.append(line[i])
@@ -44,7 +44,7 @@ def day2_part1():
     possibleGame = []
     with resource_stream('input', 'D2.txt') as textInput:
         for line in textInput.readlines():
-            line = line.decode().removesuffix("\n")
+            line = line.decode().strip()
             lineSplit = line.split(":")
             gameID = int(lineSplit[0].strip("Game "))
             cubeSets = lineSplit[-1].split(";")
@@ -56,7 +56,7 @@ def day2_part1():
                 for cube in cubes:
                     if not flagValide:
                         break
-                    nb = int(*(findall("(\d+)", cube)))
+                    nb = int(*(findall("([0-9]+)", cube)))
                     match cube:
                         case str(a) if "red" in a:
                             if nb > 12:
@@ -77,14 +77,14 @@ def day2_part2():
     gamePower = []
     with resource_stream('input', 'D2.txt') as textInput:
         for line in textInput.readlines():
-            line = line.decode().removesuffix("\n")
+            line = line.decode().strip()
             lineSplit = line.split(":")
             cubeSets = lineSplit[-1].split(";")
             gameSet = {"red": 0, "green": 0, "blue": 0}
             for cubeSet in cubeSets:
                 cubes = cubeSet.strip().split(", ")
                 for cube in cubes:
-                    nb = int(*(findall("(\d+)", cube)))
+                    nb = int(*(findall("([0-9]+)", cube)))
                     match cube:
                         case str(a) if "red" in a:
                             if nb > gameSet["red"]:
@@ -103,7 +103,9 @@ def day3_part1():
     print("Day 3")
     res = []
     with resource_stream('input', 'D3.txt') as textInput:
-        matrice = [line.decode()[:-1] for line in textInput.readlines()]
+        matrice = [line.decode().strip() for line in textInput.readlines()]
+        [(m.start(0),m.end(0),int(m.group(0))) for m in finditer("\d+",a)]
+        
         res = []
         for i in range(len(matrice)):
             for j in range(len(matrice[i])):
@@ -135,7 +137,7 @@ def day4_part1():
     res = []
     with resource_stream('input', 'D4.txt') as textInput:
         for line in textInput.readlines():
-            line = line.decode().removesuffix("\n")
+            line = line.decode().strip()
             numbers = line.split(":")[1].split("|")
             winningNumbers, givenNumbers = numbers[0].split(
             ), numbers[1].split()
@@ -154,7 +156,7 @@ def day4_part2():
         lines = textInput.readlines()
         cardnumbers = [1 for line in lines]
         for i in range(len(cardnumbers)):
-            line = lines[i].decode().removesuffix("\n")
+            line = lines[i].decode().strip()
             numbers = line.split(":")[1].split("|")
             winningNumbers, givenNumbers = numbers[0].split(
             ), numbers[1].split()
