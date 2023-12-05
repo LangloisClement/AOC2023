@@ -169,7 +169,7 @@ def day4_part2():
     return reduce(lambda a, b: a+b, cardnumbers)
 
 
-def day5_xToY(lines: list[str], i: int):
+def day5_xToY_dict(lines: list[str], i: int):
     xToY = {}
     while i < len(lines) and lines[i] != "":
         dest, source, ran = lines[i].split()
@@ -178,6 +178,21 @@ def day5_xToY(lines: list[str], i: int):
         i += 1
     return xToY, i
 
+def day5_xToY_tuples_list(lines: list[str], i: int):
+    xToY = []
+    while i < len(lines) and lines[i] != "":
+        dest, source, ran = lines[i].split()
+        dest, source, ran = int(dest), int(source), int(ran)
+        xToY.append((dest,source,ran))
+        i += 1
+    return xToY, i
+
+def day5_findNumber(n: int, tupleList: list(tuple())):
+    for t in tupleList:
+        if n >= t[1] and n<=t[1]+t[2]:
+            diff=n-t[1]
+            return diff+t[0]
+    return n    
 
 def day5_part1BRUT_FORCE():
     print("Day 5")
@@ -186,19 +201,19 @@ def day5_part1BRUT_FORCE():
         seedNumbers = lines[0].split(":")[1].split()
         i = 3
         print("compiling seed to soil")
-        seedToSoil, i = day5_xToY(lines, i)
+        seedToSoil, i = day5_xToY_dict(lines, i)
         print("compiling soil to fert")
-        soilToFert, i = day5_xToY(lines, i+2)
+        soilToFert, i = day5_xToY_dict(lines, i+2)
         print("compiling fert to water")
-        fertToWater, i = day5_xToY(lines, i+2)
+        fertToWater, i = day5_xToY_dict(lines, i+2)
         print("compiling water to light")
-        waterToLight, i = day5_xToY(lines, i+2)
+        waterToLight, i = day5_xToY_dict(lines, i+2)
         print("compiling light to temp")
-        lightToTemp, i = day5_xToY(lines, i+2)
+        lightToTemp, i = day5_xToY_dict(lines, i+2)
         print("compiling temp to humi")
-        tempToHumidity, i = day5_xToY(lines, i+2)
+        tempToHumidity, i = day5_xToY_dict(lines, i+2)
         print("compiling humi to loc")
-        humidityToLoc, i = day5_xToY(lines, i+2)
+        humidityToLoc, i = day5_xToY_dict(lines, i+2)
 
         seedToSoil.setdefault
         locList = []
@@ -215,5 +230,40 @@ def day5_part1BRUT_FORCE():
 
         return locList.sort()[0]
 
+def day5_part1():
+    print("Day 5")
+    with resource_stream('input', 'D5.txt') as textInput:
+        lines = [l.decode().strip() for l in textInput.readlines()]
+        seedNumbers = lines[0].split(":")[1].split()
+        i = 3
+        print("compiling seed to soil")
+        seedToSoil, i = day5_xToY_tuples_list(lines, i)
+        print("compiling soil to fert")
+        soilToFert, i = day5_xToY_tuples_list(lines, i+2)
+        print("compiling fert to water")
+        fertToWater, i = day5_xToY_tuples_list(lines, i+2)
+        print("compiling water to light")
+        waterToLight, i = day5_xToY_tuples_list(lines, i+2)
+        print("compiling light to temp")
+        lightToTemp, i = day5_xToY_tuples_list(lines, i+2)
+        print("compiling temp to humi")
+        tempToHumidity, i = day5_xToY_tuples_list(lines, i+2)
+        print("compiling humi to loc")
+        humidityToLoc, i = day5_xToY_tuples_list(lines, i+2)
+        locList = []
+        for seed in seedNumbers:
+            seed=int(seed)
+            soil = day5_findNumber(seed,seedToSoil)
+            fert = day5_findNumber(soil,soilToFert)
+            water = day5_findNumber(fert,fertToWater)
+            light = day5_findNumber(water,waterToLight)
+            temp = day5_findNumber(light,lightToTemp)
+            hum = day5_findNumber(temp,tempToHumidity)
+            loc = day5_findNumber(hum,humidityToLoc)
+            locList.append(loc)
 
-print(day5_part1BRUT_FORCE())
+        locList.sort()
+        return locList[0]
+    
+
+print(day5_part1())
