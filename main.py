@@ -171,4 +171,4 @@ def day4_part2():
     return reduce(lambda a, b: a+b, cardnumbers)
 
 day5Class=Day5("D5.txt")
-print( day5Class.part1())
+print( day5Class.part2())

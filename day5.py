@@ -14,7 +14,7 @@ class Day5:
     def __init__(self, input: str) -> None:
         with resource_stream('input', input) as textInput:
             lines = [l.decode().strip() for l in textInput.readlines()]
-            self.seedNumbers = lines[0].split(":")[1].split()
+            self.seedNumbers = [int(nb) for nb in lines[0].split(":")[1].split()]
             i = 3
             print("compiling seed to soil")
             self.seedToSoil, i = self.day5_xToY_tuples_list(lines, i)
@@ -44,7 +44,6 @@ class Day5:
         print("Day 5")
         locList = []
         for seed in self.seedNumbers:
-            seed = int(seed)
             soil = day5_findNumber(seed, self.seedToSoil)
             fert = day5_findNumber(soil, self.soilToFert)
             water = day5_findNumber(fert, self.fertToWater)
@@ -55,9 +54,28 @@ class Day5:
             locList.append(loc)
 
         locList.sort()
-        return locList[0]
+        return min(locList)
 
+    def part2(self):
+        locList = []
 
+        for i in range(0, len(self.seedNumbers), 2):
+            print(f'dealing with pair nb: {i/2}')
+            locRange = []
+            for seeds in range(self.seedNumbers[i], self.seedNumbers[i]+self.seedNumbers[i+1]):
+                soil = day5_findNumber(seeds, self.seedToSoil)
+                fert = day5_findNumber(soil, self.soilToFert)
+                water = day5_findNumber(fert, self.fertToWater)
+                light = day5_findNumber(water, self.waterToLight)
+                temp = day5_findNumber(light, self.lightToTemp)
+                hum = day5_findNumber(temp, self.tempToHumidity)
+                loc = day5_findNumber(hum, self.humidityToLoc)
+                locRange.append(loc)
+            locList.append(min(locRange))
+        return min(locList)
+
+#550427451 min pair 1
+#125675349 min pair 2
 def day5_findNumber(n: int, tupleList: list(tuple())):
     for t in tupleList:
         if n >= t[1] and n <= t[1]+t[2]:
