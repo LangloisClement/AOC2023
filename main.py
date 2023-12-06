@@ -2,7 +2,9 @@
 
 from pkg_resources import resource_stream
 from functools import reduce
-from re import sub, findall,finditer
+from re import sub, findall, finditer
+import math
+
 from day5 import Day5
 
 print("hello world")
@@ -104,8 +106,8 @@ def day3_part1():
     res = []
     with resource_stream('input', 'D3.txt') as textInput:
         matrice = [line.decode().strip() for line in textInput.readlines()]
-        [(m.start(0),m.end(0),int(m.group(0))) for m in finditer("\d+",a)]
-        
+        [(m.start(0), m.end(0), int(m.group(0))) for m in finditer("\d+", a)]
+
         res = []
         for i in range(len(matrice)):
             for j in range(len(matrice[i])):
@@ -170,5 +172,27 @@ def day4_part2():
                 cardnumbers[j] += cardnumbers[i]
     return reduce(lambda a, b: a+b, cardnumbers)
 
-day5Class=Day5("D5.txt")
-print( day5Class.part2())
+
+def day6_part1():
+    print("day 6")
+    times, distances = [], []
+    with resource_stream('input', 'D6.txt') as textInput:
+        lines = textInput.readlines()
+        times = lines[0].decode().strip().split(":")[-1].split()
+        distances = lines[1].decode().strip().split(":")[-1].split()
+    nbSoluce=[]
+    for i in range(len(times)):
+        # D=times[i]*x-x²
+        nbsol=0
+        time=int(times[i])
+        distance=int(distances[i])
+        for x in range(time):
+            if (x*time)-(x**2)>distance:
+                nbsol+=1
+        nbSoluce.append(nbsol)
+    return reduce(lambda a,b: a*b, nbSoluce)
+
+
+#day5Class = Day5("D5.txt")
+#print(day5Class.part2())
+print(day6_part1())
