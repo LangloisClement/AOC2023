@@ -3,8 +3,6 @@
 from pkg_resources import resource_stream
 from functools import reduce
 from re import sub, findall, finditer
-import math
-
 from day5 import Day5
 
 print("hello world")
@@ -180,19 +178,34 @@ def day6_part1():
         lines = textInput.readlines()
         times = lines[0].decode().strip().split(":")[-1].split()
         distances = lines[1].decode().strip().split(":")[-1].split()
-    nbSoluce=[]
+    nbSoluce = []
     for i in range(len(times)):
         # D=times[i]*x-x²
-        nbsol=0
-        time=int(times[i])
-        distance=int(distances[i])
+        nbsol = 0
+        time = int(times[i])
+        distance = int(distances[i])
         for x in range(time):
-            if (x*time)-(x**2)>distance:
-                nbsol+=1
+            if (x*time)-(x**2) > distance:
+                nbsol += 1
         nbSoluce.append(nbsol)
-    return reduce(lambda a,b: a*b, nbSoluce)
+    return reduce(lambda a, b: a*b, nbSoluce)
 
 
-#day5Class = Day5("D5.txt")
-#print(day5Class.part2())
-print(day6_part1())
+def day6_part2():
+    print("day 6")
+    with resource_stream('input', 'D6.txt') as textInput:
+        lines = textInput.readlines()
+        
+        time = int(sub("[\r\n\t\f\v ]", "", lines[0].decode().strip().split(":")[-1]))
+        distance = int(sub("[\r\n\t\f\v ]", "", lines[1].decode().strip().split(":")[-1]))
+    # D=times[i]*x-x²
+    nbsol = 0
+    for x in range(time):
+        if (x*time)-(x**2) > distance:
+            nbsol += 1
+    return nbsol
+
+
+# day5Class = Day5("D5.txt")
+# print(day5Class.part2())
+print(day6_part2())
