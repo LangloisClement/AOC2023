@@ -11,10 +11,11 @@ class Day5:
     tempToHumidity = {}
     humidityToLoc = {}
 
-    def __init__(self, input: str) -> None:
-        with resource_stream('input', input) as textInput:
+    def __init__(self, puzzleInput: str) -> None:
+        with resource_stream('input', puzzleInput) as textInput:
             lines = [l.decode().strip() for l in textInput.readlines()]
-            self.seedNumbers = [int(nb) for nb in lines[0].split(":")[1].split()]
+            self.seedNumbers = [int(nb)
+                                for nb in lines[0].split(":")[1].split()]
             i = 3
             print("compiling seed to soil")
             self.seedToSoil, i = self.day5_xToY_tuples_list(lines, i)
@@ -74,8 +75,10 @@ class Day5:
             locList.append(min(locRange))
         return min(locList)
 
-#550427451 min pair 1
-#125675349 min pair 2
+# 550427451 min pair 1
+# 125675349 min pair 2
+
+
 def day5_findNumber(n: int, tupleList: list(tuple())):
     for t in tupleList:
         if n >= t[1] and n <= t[1]+t[2]:

@@ -4,6 +4,7 @@ from pkg_resources import resource_stream
 from functools import reduce
 from re import sub, findall, finditer
 from day5 import Day5
+from day7 import Day7, Day7_hand
 
 print("hello world")
 
@@ -195,9 +196,11 @@ def day6_part2():
     print("day 6")
     with resource_stream('input', 'D6.txt') as textInput:
         lines = textInput.readlines()
-        
-        time = int(sub("[\r\n\t\f\v ]", "", lines[0].decode().strip().split(":")[-1]))
-        distance = int(sub("[\r\n\t\f\v ]", "", lines[1].decode().strip().split(":")[-1]))
+
+        time = int(sub("[\r\n\t\f\v ]", "",
+                   lines[0].decode().strip().split(":")[-1]))
+        distance = int(
+            sub("[\r\n\t\f\v ]", "", lines[1].decode().strip().split(":")[-1]))
     # D=times[i]*x-x²
     nbsol = 0
     for x in range(time):
@@ -208,4 +211,5 @@ def day6_part2():
 
 # day5Class = Day5("D5.txt")
 # print(day5Class.part2())
-print(day6_part2())
+day7 = Day7("D7.txt")
+print(day7.part1())
