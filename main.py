@@ -209,7 +209,63 @@ def day6_part2():
     return nbsol
 
 
+def day8_part1():
+    print("day 8")
+    directions = ""
+    nodes = {}
+    with resource_stream('input', 'D8.txt') as textInput:
+        lines = textInput.readlines()
+        directions = lines[0].decode().strip()
+        for i in range(2, len(lines)):
+            l = lines[i].decode().strip().split(" = ")
+            k = l[0]
+            v = findall("\w+", l[1])
+            nodes[k] = tuple(v)
+    node = "AAA"
+    nbstep = 0
+    while node != "ZZZ":
+        d = directions[nbstep % len(directions)]
+        match d:
+            case "L":
+                node = nodes[node][0]
+            case "R":
+                node = nodes[node][1]
+        nbstep += 1
+    return nbstep
+
+
+def listStrEndsWith(l: list[str], end: str):
+    for s in l:
+        if not s.endswith(end):
+            return False
+    return True
+
+
+def day8_part2():
+    print("day 8")
+    directions = ""
+    nodes = {}
+    with resource_stream('input', 'D8.txt') as textInput:
+        lines = textInput.readlines()
+        directions = lines[0].decode().strip()
+        for i in range(2, len(lines)):
+            l = lines[i].decode().strip().split(" = ")
+            k = l[0]
+            v = findall("\w+", l[1])
+            nodes[k] = tuple(v)
+
+    curentNodes = [s for s in nodes.keys() if s.endswith("A")]
+    nbstep = 0
+    while not listStrEndsWith(curentNodes, "Z"):
+        d = 0 if directions[nbstep % len(directions)] == "L" else 1
+        for i in range(len(curentNodes)):
+            curentNodes[i] = nodes[curentNodes[i]][d]
+        nbstep += 1
+    return nbstep
+
+
 # day5Class = Day5("D5.txt")
 # print(day5Class.part2())
-day7 = Day7("D7.txt")
-print(day7.part1())
+# day7 = Day7("D7.txt")
+# print(day7.part1())
+print(day8_part2())
