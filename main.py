@@ -312,6 +312,6 @@ def day9_part2():
 
 # day5Class = Day5("D5.txt")
 # print(day5Class.part2())
-# day7 = Day7("D7.txt")
-# print(day7.part1())
-print(day9_part2())
+day7 = Day7("D7.txt")
+print(day7.part2())
+# print(day9_part2())
