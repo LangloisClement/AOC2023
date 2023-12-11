@@ -105,7 +105,7 @@ def day3_part1():
     res = []
     with resource_stream('input', 'D3.txt') as textInput:
         matrice = [line.decode().strip() for line in textInput.readlines()]
-        [(m.start(0), m.end(0), int(m.group(0))) for m in finditer("\d+", a)]
+        # [(m.start(0), m.end(0), int(m.group(0))) for m in finditer("\d+", a)]
 
         res = []
         for i in range(len(matrice)):
@@ -219,7 +219,7 @@ def day8_part1():
         for i in range(2, len(lines)):
             l = lines[i].decode().strip().split(" = ")
             k = l[0]
-            v = findall("\w+", l[1])
+            v = findall("[a-zA-Z0-9_]+", l[1])
             nodes[k] = tuple(v)
     node = "AAA"
     nbstep = 0
@@ -251,7 +251,7 @@ def day8_part2():
         for i in range(2, len(lines)):
             l = lines[i].decode().strip().split(" = ")
             k = l[0]
-            v = findall("\w+", l[1])
+            v = findall("[a-zA-Z0-9_]+", l[1])
             nodes[k] = tuple(v)
 
     curentNodes = [s for s in nodes.keys() if s.endswith("A")]
@@ -310,8 +310,57 @@ def day9_part2():
     return reduce(lambda a,b: a+b, nextValues)
 
 
+def expandUnivers(universe: list[str]):
+    lineToAdd=[]
+    colToAdd=[]
+    for i in range(len(universe)):
+        if not "#" in universe[i]:
+            lineToAdd.append(i)
+    for i in range(len(universe[0])):
+        flag=True
+        for line in universe:
+            if line[i]=="#":
+                flag=False
+                break
+        if flag:
+            colToAdd.append(i)
+    for nb in colToAdd:
+        for i in range(len(universe)):
+            universe[i]=universe[i][:nb]+"."+universe[i][nb:]
+    count=0
+    for nb in lineToAdd:
+        universe.insert(nb+count,universe[nb+count])
+        count+=1
+
+def day11_part1():
+    print("day 11")
+    universe=[]
+    with resource_stream('input', 'test.txt') as textInput:
+        universe=[line.decode().strip() for line in textInput.readlines()]
+    # find index to expand
+    expandUnivers(universe)
+    lenUni=len(universe[0])
+    coordGalaxies=[]
+    for i in range(len(universe)):
+        coordGalaxies+=[(x.start(),i) for x in finditer("#",universe[i])]
+    res=0
+    for i in range(len(coordGalaxies)-1):
+        for coord in coordGalaxies[i+1:]:
+            if coordGalaxies[i][0]<coord[0]:
+                absX = coord[0]-coordGalaxies[i][0]
+            else:
+                absX = coordGalaxies[i][0]-coord[0]
+            absY = abs(coordGalaxies[i][1]-coord[1])
+            dist = absX+absY
+            print(f"dist {coordGalaxies[i]} -- {coord} = {absX}+{absY}={dist}")
+            res+=dist
+    return res
+
+
+
 # day5Class = Day5("D5.txt")
 # print(day5Class.part2())
-day7 = Day7("D7.txt")
-print(day7.part2())
+# day7 = Day7("D7.txt")
+# print(day7.part2())
 # print(day9_part2())
+print(day11_part1())
