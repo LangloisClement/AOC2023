@@ -14,7 +14,7 @@ def day1_part1():
     with resource_stream('input', 'D1.txt') as textInput:
         for line in textInput.readlines():
             line = line.decode().strip()
-            numbers = sub("[^0-9]", "", line)
+            numbers = sub(r"\D", "", line)
             lineNumber = "".join([numbers[0], numbers[-1]])
             listNumber.append(int(lineNumber))
     return reduce(lambda a, b: a+b, listNumber)
@@ -57,7 +57,7 @@ def day2_part1():
                 for cube in cubes:
                     if not flagValide:
                         break
-                    nb = int(*(findall("([0-9]+)", cube)))
+                    nb = int(*(findall(r"(\d+)", cube)))
                     match cube:
                         case str(a) if "red" in a:
                             if nb > 12:
@@ -85,7 +85,7 @@ def day2_part2():
             for cubeSet in cubeSets:
                 cubes = cubeSet.strip().split(", ")
                 for cube in cubes:
-                    nb = int(*(findall("([0-9]+)", cube)))
+                    nb = int(*(findall(r"(\d+)", cube)))
                     match cube:
                         case str(a) if "red" in a:
                             if nb > gameSet["red"]:
@@ -102,34 +102,58 @@ def day2_part2():
 
 def day3_part1():
     print("Day 3")
-    res = []
+    # matrice=[]
+    numbers=[]
+    symbols=[]
     with resource_stream('input', 'D3.txt') as textInput:
-        matrice = [line.decode().strip() for line in textInput.readlines()]
-        # [(m.start(0), m.end(0), int(m.group(0))) for m in finditer("\d+", a)]
+        for line in textInput.readlines():
+            line=line.decode().strip() 
+            # matrice.append(line)
+            numbers.append([(m.start(), m.end(), int(m.group())) for m in finditer(r"\d+", line)])
+            symbols.append([(m.start(), m.group()) for m in finditer(r"[^\d.]", line)])
+    res = []
+    for i in range(len(symbols)):
+        for symbol in symbols[i]:
+            voisin=range(symbol[0]-1,symbol[0]+1+1)
+            if i-1>=0:
+                for number in numbers[i-1]:
+                    nbrange=range(number[0],number[1])
+                    intersect=[v for v in nbrange if v in voisin]
+                    if len(intersect)!=0:
+                        res.append(number[2])
+            for number in numbers[i]:
+                if number[1]==symbol[0] or number[0]==symbol[0]+1:
+                    res.append(number[2])
+            if i+1<len(symbols):
+                for number in numbers[i+1]:
+                    nbrange=range(number[0],number[1])
+                    intersect=[v for v in nbrange if v in voisin]
+                    if len(intersect)!=0:
+                        res.append(number[2])
 
-        res = []
-        for i in range(len(matrice)):
-            for j in range(len(matrice[i])):
-                if not matrice[i][j].isnumeric() and matrice[i][j] != ".":
-                    print(matrice[i][j])
-                    if i-1 >= 0:
-                        if j-1 >= 0:
-                            print(f"upperleft is {matrice[i-1][j-1]}")
-                        print(f"upper is {matrice[i-1][j]}")
-                        if j+1 <= len(matrice[i]):
-                            print(f"upperright is {matrice[i-1][j+1]}")
-                    if j-1 >= 0:
-                        print(f"left is {matrice[i][j-1]}")
-                    if j+1 <= len(matrice[i]):
-                        print(f"right is {matrice[i][j+1]}")
-                    if i+1 <= len(matrice):
-                        if j-1 >= 0:
-                            print(f"bottomleft is {matrice[i+1][j-1]}")
-                        print(f"bottom is {matrice[i+1][j]}")
-                        if j+1 <= len(matrice[i]):
-                            print(f"bottomright is {matrice[i+1][j+1]}")
 
-            print("------------------------------------------------")
+
+        # for j in range(len(matrice[i])):
+        #     if not matrice[i][j].isnumeric() and matrice[i][j] != ".":
+        #         print(matrice[i][j])
+        #         if i-1 >= 0:
+        #             if j-1 >= 0:
+        #                 print(f"upperleft is {matrice[i-1][j-1]}")
+        #             print(f"upper is {matrice[i-1][j]}")
+        #             if j+1 <= len(matrice[i]):
+        #                 print(f"upperright is {matrice[i-1][j+1]}")
+        #         if j-1 >= 0:
+        #             print(f"left is {matrice[i][j-1]}")
+        #         if j+1 <= len(matrice[i]):
+        #             print(f"right is {matrice[i][j+1]}")
+        #         if i+1 <= len(matrice):
+        #             if j-1 >= 0:
+        #                 print(f"bottomleft is {matrice[i+1][j-1]}")
+        #             print(f"bottom is {matrice[i+1][j]}")
+        #             if j+1 <= len(matrice[i]):
+        #                 print(f"bottomright is {matrice[i+1][j+1]}")
+
+    print("------------------------------------------------")
     return reduce(lambda a, b: a+b, res)
 
 
@@ -197,10 +221,10 @@ def day6_part2():
     with resource_stream('input', 'D6.txt') as textInput:
         lines = textInput.readlines()
 
-        time = int(sub("[\r\n\t\f\v ]", "",
+        time = int(sub(r"\s", "",
                    lines[0].decode().strip().split(":")[-1]))
         distance = int(
-            sub("[\r\n\t\f\v ]", "", lines[1].decode().strip().split(":")[-1]))
+            sub(r"\s", "", lines[1].decode().strip().split(":")[-1]))
     # D=times[i]*x-x²
     nbsol = 0
     for x in range(time):
@@ -219,7 +243,7 @@ def day8_part1():
         for i in range(2, len(lines)):
             l = lines[i].decode().strip().split(" = ")
             k = l[0]
-            v = findall("[a-zA-Z0-9_]+", l[1])
+            v = findall(r"\w+", l[1])
             nodes[k] = tuple(v)
     node = "AAA"
     nbstep = 0
@@ -251,7 +275,7 @@ def day8_part2():
         for i in range(2, len(lines)):
             l = lines[i].decode().strip().split(" = ")
             k = l[0]
-            v = findall("[a-zA-Z0-9_]+", l[1])
+            v = findall(r"\w+", l[1])
             nodes[k] = tuple(v)
 
     curentNodes = [s for s in nodes.keys() if s.endswith("A")]
@@ -363,4 +387,4 @@ def day11_part1():
 # day7 = Day7("D7.txt")
 # print(day7.part2())
 # print(day9_part2())
-print(day11_part1())
+print(day3_part1())
