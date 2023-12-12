@@ -5,6 +5,7 @@ from functools import reduce
 from re import sub, findall, finditer
 from day5 import Day5
 from day7 import Day7
+from math import lcm
 
 print("hello world")
 
@@ -296,14 +297,16 @@ def day8_part2():
             v = findall(r"\w+", l[1])
             nodes[k] = tuple(v)
 
-    curentNodes = [s for s in nodes.keys() if s.endswith("A")]
-    nbstep = 0
-    while not listStrEndsWith(curentNodes, "Z"):
-        d = 0 if directions[nbstep % len(directions)] == "L" else 1
-        for i in range(len(curentNodes)):
-            curentNodes[i] = nodes[curentNodes[i]][d]
-        nbstep += 1
-    return nbstep
+    startNodes = [s for s in nodes.keys() if s.endswith("A")]
+    cycleSize=[]
+    for node in startNodes:
+        nbstep = 0
+        while not node.endswith("Z"):
+            d = 0 if directions[nbstep % len(directions)] == "L" else 1
+            node=nodes[node][d]
+            nbstep+=1
+        cycleSize.append(nbstep)
+    return lcm(*cycleSize)
 
 
 def calcNextValue(listValues: list[int]):
@@ -469,4 +472,5 @@ def day11_part2():
 # day7 = Day7("D7.txt")
 # print(day7.part2())
 # print(day9_part2())
-print(day11_part2())
+# print(day11_part2())
+print(day8_part2())
