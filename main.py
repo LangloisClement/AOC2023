@@ -103,58 +103,76 @@ def day2_part2():
 def day3_part1():
     print("Day 3")
     # matrice=[]
-    numbers=[]
-    symbols=[]
+    numbers = []
+    symbols = []
     with resource_stream('input', 'D3.txt') as textInput:
         for line in textInput.readlines():
-            line=line.decode().strip() 
+            line = line.decode().strip()
             # matrice.append(line)
-            numbers.append([(m.start(), m.end(), int(m.group())) for m in finditer(r"\d+", line)])
-            symbols.append([(m.start(), m.group()) for m in finditer(r"[^\d.]", line)])
+            numbers.append([(m.start(), m.end(), int(m.group()))
+                           for m in finditer(r"\d+", line)])
+            symbols.append([(m.start(), m.group())
+                           for m in finditer(r"[^\d.]", line)])
     res = []
     for i in range(len(symbols)):
         for symbol in symbols[i]:
-            voisin=range(symbol[0]-1,symbol[0]+1+1)
-            if i-1>=0:
+            voisin = range(symbol[0]-1, symbol[0]+1+1)
+            if i-1 >= 0:
                 for number in numbers[i-1]:
-                    nbrange=range(number[0],number[1])
-                    intersect=[v for v in nbrange if v in voisin]
-                    if len(intersect)!=0:
+                    nbrange = range(number[0], number[1])
+                    intersect = [v for v in nbrange if v in voisin]
+                    if len(intersect) != 0:
                         res.append(number[2])
             for number in numbers[i]:
-                if number[1]==symbol[0] or number[0]==symbol[0]+1:
+                if number[1] == symbol[0] or number[0] == symbol[0]+1:
                     res.append(number[2])
-            if i+1<len(symbols):
+            if i+1 < len(symbols):
                 for number in numbers[i+1]:
-                    nbrange=range(number[0],number[1])
-                    intersect=[v for v in nbrange if v in voisin]
-                    if len(intersect)!=0:
+                    nbrange = range(number[0], number[1])
+                    intersect = [v for v in nbrange if v in voisin]
+                    if len(intersect) != 0:
                         res.append(number[2])
-
-
-
-        # for j in range(len(matrice[i])):
-        #     if not matrice[i][j].isnumeric() and matrice[i][j] != ".":
-        #         print(matrice[i][j])
-        #         if i-1 >= 0:
-        #             if j-1 >= 0:
-        #                 print(f"upperleft is {matrice[i-1][j-1]}")
-        #             print(f"upper is {matrice[i-1][j]}")
-        #             if j+1 <= len(matrice[i]):
-        #                 print(f"upperright is {matrice[i-1][j+1]}")
-        #         if j-1 >= 0:
-        #             print(f"left is {matrice[i][j-1]}")
-        #         if j+1 <= len(matrice[i]):
-        #             print(f"right is {matrice[i][j+1]}")
-        #         if i+1 <= len(matrice):
-        #             if j-1 >= 0:
-        #                 print(f"bottomleft is {matrice[i+1][j-1]}")
-        #             print(f"bottom is {matrice[i+1][j]}")
-        #             if j+1 <= len(matrice[i]):
-        #                 print(f"bottomright is {matrice[i+1][j+1]}")
-
-    print("------------------------------------------------")
     return reduce(lambda a, b: a+b, res)
+
+
+def day3_part2():
+    print("Day 3")
+    numbers = []
+    symbols = []
+    with resource_stream('input', 'D3.txt') as textInput:
+        for line in textInput.readlines():
+            line = line.decode().strip()
+            # matrice.append(line)
+            numbers.append([(m.start(), m.end(), int(m.group()))
+                           for m in finditer(r"\d+", line)])
+            symbols.append([(m.start(), m.group())
+                           for m in finditer(r"\*", line)])
+    res = []
+    for i in range(len(symbols)):
+        for symbol in symbols[i]:
+            gears = []
+            voisin = range(symbol[0]-1, symbol[0]+1+1)
+            if i-1 >= 0:
+                for number in numbers[i-1]:
+                    nbrange = range(number[0], number[1])
+                    intersect = [v for v in nbrange if v in voisin]
+                    if len(intersect) != 0:
+                        gears.append(number[2])
+            for number in numbers[i]:
+                if number[1] == symbol[0] or number[0] == symbol[0]+1:
+                    gears.append(number[2])
+            if i+1 < len(symbols):
+                for number in numbers[i+1]:
+                    nbrange = range(number[0], number[1])
+                    intersect = [v for v in nbrange if v in voisin]
+                    if len(intersect) != 0:
+                        gears.append(number[2])
+            res.append(gears)
+    a = 0
+    for gears in res:
+        if len(gears) == 2:
+            a += gears[0]*gears[1]
+    return a
 
 
 def day4_part1():
@@ -287,99 +305,107 @@ def day8_part2():
         nbstep += 1
     return nbstep
 
+
 def calcNextValue(listValues: list[int]):
-    flagRec=False
+    flagRec = False
     for value in listValues:
-        if value!=0:
-            flagRec=True
+        if value != 0:
+            flagRec = True
             break
     if not flagRec:
         return 0
-    ecartValues=[listValues[i+1]-listValues[i] for i in range(len(listValues)-1)]
-    r=listValues[-1]+calcNextValue(ecartValues)
+    ecartValues = [listValues[i+1]-listValues[i]
+                   for i in range(len(listValues)-1)]
+    r = listValues[-1]+calcNextValue(ecartValues)
     return r
-    
+
 
 def day9_part1():
     print("day 9")
-    histories=[]
-    nextValues=[]
+    histories = []
+    nextValues = []
     with resource_stream('input', 'D9.txt') as textInput:
-        histories = [[int(x) for x in line.decode().strip().split()] for line in textInput.readlines()]
+        histories = [[int(x) for x in line.decode().strip().split()]
+                     for line in textInput.readlines()]
     for history in histories:
         nextValues.append(calcNextValue(history))
-    return reduce(lambda a,b: a+b, nextValues)
+    return reduce(lambda a, b: a+b, nextValues)
+
 
 def calcPreviousValue(listValues: list[int]):
-    flagRec=False
+    flagRec = False
     for value in listValues:
-        if value!=0:
-            flagRec=True
+        if value != 0:
+            flagRec = True
             break
     if not flagRec:
         return 0
-    ecartValues=[listValues[i+1]-listValues[i] for i in range(len(listValues)-1)]
-    r=listValues[0]-calcPreviousValue(ecartValues)
+    ecartValues = [listValues[i+1]-listValues[i]
+                   for i in range(len(listValues)-1)]
+    r = listValues[0]-calcPreviousValue(ecartValues)
     return r
 
 
 def day9_part2():
     print("day 9")
-    histories=[]
-    nextValues=[]
+    histories = []
+    nextValues = []
     with resource_stream('input', 'D9.txt') as textInput:
-        histories = [[int(x) for x in line.decode().strip().split()] for line in textInput.readlines()]
+        histories = [[int(x) for x in line.decode().strip().split()]
+                     for line in textInput.readlines()]
     for history in histories:
         nextValues.append(calcPreviousValue(history))
-    return reduce(lambda a,b: a+b, nextValues)
+    return reduce(lambda a, b: a+b, nextValues)
 
 
 def expandUnivers(universe: list[str]):
-    lineToAdd=[]
-    colToAdd=[]
+    lineToAdd = []
+    colToAdd = []
     for i in range(len(universe)):
         if not "#" in universe[i]:
             lineToAdd.append(i)
     for i in range(len(universe[0])):
-        flag=True
+        flag = True
         for line in universe:
-            if line[i]=="#":
-                flag=False
+            if line[i] == "#":
+                flag = False
                 break
         if flag:
             colToAdd.append(i)
+    count = 0
     for nb in colToAdd:
         for i in range(len(universe)):
-            universe[i]=universe[i][:nb]+"."+universe[i][nb:]
-    count=0
+            universe[i] = universe[i][:nb+count]+"."+universe[i][nb+count:]
+        count += 1
+    count = 0
     for nb in lineToAdd:
-        universe.insert(nb+count,universe[nb+count])
-        count+=1
+        universe.insert(nb+count, universe[nb+count])
+        count += 1
+
 
 def day11_part1():
     print("day 11")
-    universe=[]
-    with resource_stream('input', 'test.txt') as textInput:
-        universe=[line.decode().strip() for line in textInput.readlines()]
+    universe = []
+    with resource_stream('input', 'D11.txt') as textInput:
+        universe = [line.decode().strip() for line in textInput.readlines()]
     # find index to expand
     expandUnivers(universe)
-    lenUni=len(universe[0])
-    coordGalaxies=[]
+    lenUni = len(universe[0])
+    coordGalaxies = []
     for i in range(len(universe)):
-        coordGalaxies+=[(x.start(),i) for x in finditer("#",universe[i])]
-    res=0
+        coordGalaxies += [(x.start(), i) for x in finditer("#", universe[i])]
+    res = 0
     for i in range(len(coordGalaxies)-1):
         for coord in coordGalaxies[i+1:]:
-            if coordGalaxies[i][0]<coord[0]:
+            if coordGalaxies[i][0] < coord[0]:
                 absX = coord[0]-coordGalaxies[i][0]
             else:
                 absX = coordGalaxies[i][0]-coord[0]
             absY = abs(coordGalaxies[i][1]-coord[1])
             dist = absX+absY
-            print(f"dist {coordGalaxies[i]} -- {coord} = {absX}+{absY}={dist}")
-            res+=dist
+            # print(f"dist {coordGalaxies[i]} -- {coord} = {absX}+{absY}={dist}")
+            res += dist
     return res
-
 
 
 # day5Class = Day5("D5.txt")
@@ -387,4 +413,4 @@ def day11_part1():
 # day7 = Day7("D7.txt")
 # print(day7.part2())
 # print(day9_part2())
-print(day3_part1())
+print(day11_part1())
