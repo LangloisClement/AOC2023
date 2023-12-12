@@ -93,43 +93,43 @@ class Day7_hand:
         else:
             return self.handType.value < other.handType.value
 
-    def updateJ(self):        
-        self.handCards=[1 if card==11 else card for card in self.handCards]
+    def updateJ(self):
+        self.handCards = [1 if card == 11 else card for card in self.handCards]
         counter = Counter(self.handCards)
         if 1 in counter.keys():
             match counter[1]:
                 case 1:
                     match self.handType:
                         case enumHandType.HIGH:
-                            self.handType=enumHandType.ONE_PAIR
+                            self.handType = enumHandType.ONE_PAIR
                         case enumHandType.ONE_PAIR:
-                            self.handType=enumHandType.THREE
+                            self.handType = enumHandType.THREE
                         case enumHandType.TWO_PAIR:
-                            self.handType=enumHandType.FULL_HOUSE
+                            self.handType = enumHandType.FULL_HOUSE
                         case enumHandType.THREE:
-                            self.handType=enumHandType.FOUR
+                            self.handType = enumHandType.FOUR
                         case enumHandType.FULL_HOUSE:
-                          self.handType=enumHandType.FOUR
+                            self.handType = enumHandType.FOUR
                         case enumHandType.FOUR:
-                            self.handType=enumHandType.FIVE
+                            self.handType = enumHandType.FIVE
                 case 2:
                     match self.handType:
                         case enumHandType.ONE_PAIR:
-                            self.handType=enumHandType.THREE
+                            self.handType = enumHandType.THREE
                         case enumHandType.TWO_PAIR:
-                            self.handType=enumHandType.FOUR
+                            self.handType = enumHandType.FOUR
                         case enumHandType.FULL_HOUSE:
-                          self.handType=enumHandType.FIVE
+                            self.handType = enumHandType.FIVE
                 case 3:
                     match self.handType:
                         case enumHandType.THREE:
-                            self.handType=enumHandType.FOUR
+                            self.handType = enumHandType.FOUR
                         case enumHandType.FULL_HOUSE:
-                          self.handType=enumHandType.FIVE
+                            self.handType = enumHandType.FIVE
                 case 4:
                     match self.handType:
                         case enumHandType.FOUR:
-                            self.handType=enumHandType.FIVE
+                            self.handType = enumHandType.FIVE
                 case 5:
                     pass
 
@@ -157,4 +157,3 @@ class Day7:
         self.hands.sort()
         bidValues = [(i+1)*self.hands[i][1] for i in range(len(self.hands))]
         return reduce(lambda a, b: a+b, bidValues)
-        

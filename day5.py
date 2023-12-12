@@ -58,11 +58,11 @@ class Day5:
         return min(locList)
 
     def part2(self):
-        res=1000000000000
-        seedNumber=0
+        res = 1000000000000
+        seedNumber = 0
         for i in range(0, len(self.seedNumbers), 2):
             print(f'dealing with pair nb: {i/2}')
-            start=self.seedNumbers[i] if self.seedNumbers[i]>seedNumber else seedNumber
+            start = self.seedNumbers[i] if self.seedNumbers[i] > seedNumber else seedNumber
             for seeds in range(self.seedNumbers[i], self.seedNumbers[i]+self.seedNumbers[i+1]):
                 soil = day5_findNumber(seeds, self.seedToSoil)
                 fert = day5_findNumber(soil, self.soilToFert)
@@ -71,8 +71,8 @@ class Day5:
                 temp = day5_findNumber(light, self.lightToTemp)
                 hum = day5_findNumber(temp, self.tempToHumidity)
                 loc = day5_findNumber(hum, self.humidityToLoc)
-                res=loc if loc<res else res
-                seedNumber=seeds
+                res = loc if loc < res else res
+                seedNumber = seeds
         return res
 
 # 550427451 min pair 1
