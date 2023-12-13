@@ -75,9 +75,6 @@ class Day5:
                 seedNumber = seeds
         return res
 
-# 550427451 min pair 1
-# 125675349 min pair 2
-
 
 def day5_findNumber(n: int, tupleList: list(tuple())):
     for t in tupleList:
