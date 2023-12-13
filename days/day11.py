@@ -27,7 +27,7 @@ def expandUnivers(universe: list[str]):
         count += 1
 
 
-def day11_part1():
+def part1():
     print("day 11")
     universe = []
     with resource_stream('input', 'D11.txt') as textInput:
@@ -69,7 +69,7 @@ def expandOldUnivers(universe: list[str]):
     return (colToAdd, lineToAdd)
 
 
-def day11_part2():
+def part2():
     print("day 11")
     universe = []
     FACTEUR = 1000000
