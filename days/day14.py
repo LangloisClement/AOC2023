@@ -34,7 +34,7 @@ def tiltNorth(platform):
 
 def tiltSouth(platform):
     colToChange = [i for i in range(len(platform[0]))]
-    while len(colToChange)!=0:
+    while len(colToChange) != 0:
         for col in colToChange:
             change = False
             for row in range(len(platform)-2, -1, -1):
@@ -50,7 +50,7 @@ def tiltSouth(platform):
 
 def tiltWest(platform):
     rowToChange = [i for i in range(len(platform))]
-    while len(rowToChange)!=0:
+    while len(rowToChange) != 0:
         for row in rowToChange:
             change = False
             for col in range(1, len(platform[0])):
@@ -64,7 +64,7 @@ def tiltWest(platform):
 
 def tiltEst(platform):
     rowToChange = [i for i in range(len(platform))]
-    while len(rowToChange)!=0:
+    while len(rowToChange) != 0:
         change = False
         for row in rowToChange:
             for col in range(len(platform[0])-2, -1, -1):
@@ -79,13 +79,24 @@ def tiltEst(platform):
 def part2():
     print("day 14")
     platform = []
-    with resource_stream('input', 'test.txt') as textInput:
+    with resource_stream('input', 'D14.txt') as textInput:
         platform = [line.decode().strip() for line in textInput.readlines()]
-    for i in range(1000000000):
+    LIMITS = 1000000000
+    i = 0
+    paternMemory = {}
+    while i < LIMITS:
+        i += 1
         tiltNorth(platform)
         tiltWest(platform)
         tiltSouth(platform)
         tiltEst(platform)
+        platformFixe = tuple(tuple(row) for row in platform)
+        if platformFixe in paternMemory:
+            cycle_length = i-paternMemory[platformFixe]
+            amt = (LIMITS-i)//cycle_length
+            i += amt * cycle_length
+        paternMemory[platformFixe] = i
+
     res = 0
     for row in range(len(platform)):
         nbRounRock = len(findall("O", platform[row]))
