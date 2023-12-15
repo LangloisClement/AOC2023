@@ -5,4 +5,4 @@ from days.day7 import Day7
 
 
 print("Merry Advent of Code 2023!")
-print(day15.part1())
+print(day15.part2())
