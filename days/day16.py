@@ -7,12 +7,14 @@ Direction = Enum("Direction", ["UP", "RIGHT", "DOWN", "LEFT"])
 
 def part1():
     print("day 16")
-    return energized(0,0,Direction.RIGHT)
-
-def energized(startRow: int, startCol: int, startDirection: Direction):
     wall = []
     with resource_stream('input', 'D16.txt') as textInput:
         wall = [line.decode().strip() for line in textInput.readlines()]
+
+    return energized(0, 0, Direction.RIGHT, wall)
+
+
+def energized(startRow: int, startCol: int, startDirection: Direction, wall: list[str]):
     ROW = len(wall)
     COL = len(wall[0])
     seen = set()
@@ -109,3 +111,22 @@ def energized(startRow: int, startCol: int, startDirection: Direction):
         r, c, d = cellDirection
         cell.add((r, c))
     return len(cell)
+
+
+def part2():
+    print("day 16")
+    wall = []
+    with resource_stream('input', 'D16.txt') as textInput:
+        wall = [line.decode().strip() for line in textInput.readlines()]
+    possibleStart = []
+    possibleStart += [(0, c, Direction.DOWN) for c in range(len(wall[0]))]
+    possibleStart += [(len(wall)-1, c, Direction.UP)
+                      for c in range(len(wall[0]))]
+    possibleStart += [(r, 0, Direction.RIGHT) for r in range(len(wall))]
+    possibleStart += [(r, len(wall[0])-1, Direction.LEFT)
+                      for r in range(len(wall))]
+    res = []
+    for start in possibleStart:
+        r, c, d = start
+        res.append(energized(r, c, d, wall))
+    return max(res)
